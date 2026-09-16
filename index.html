@@ -895,6 +895,13 @@ table.data-table tr.visited td {
 }
 
 /* MODAL DE FICHA PROSPECTO CRM */
+/* Body lock when modal is active */
+body.modal-open {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -911,6 +918,7 @@ table.data-table tr.visited td {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
+  overscroll-behavior: contain;
 }
 
 .modal-backdrop.open {
@@ -979,6 +987,7 @@ table.data-table tr.visited td {
   padding: 22px;
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1814,10 +1823,12 @@ function openProspectModal(item = null) {
   }
   
   document.getElementById('prospect-modal-backdrop').classList.add('open');
+  document.body.classList.add('modal-open');
 }
 
 function closeProspectModal() {
   document.getElementById('prospect-modal-backdrop').classList.remove('open');
+  document.body.classList.remove('modal-open');
 }
 
 function selectTemp(temp) {
