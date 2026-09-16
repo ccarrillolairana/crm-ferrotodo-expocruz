@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Barrido Industrial Expocruz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F3F6F1; --surface:#FFFFFF; --surface-2:#E9EEE6; --surface-3:#DCE4D8;
+  --ink:#1C2A20; --ink-dim:#57685D; --ink-faint:#8C9A8F;
+  --line:#D6DECE; --line-strong:#B9C6B2;
+  --accent:#C06A24; --accent-ink:#8A4813;
+  --p-alta:#3E7D5A; --p-alta-soft:#DCEBDF;
+  --p-media:#B8862F; --p-media-soft:#F3E6CC;
+  --p-baja:#A64C4C; --p-baja-soft:#F0DADA;
+  --shadow: 0 1px 2px rgba(28,42,32,.06), 0 4px 14px rgba(28,42,32,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#12160F; --surface:#191F16; --surface-2:#1F261B; --surface-3:#293321;
+    --ink:#E7EEE3; --ink-dim:#AEBBA6; --ink-faint:#7C8A77;
+    --line:#2C3626; --line-strong:#3C4A32;
+    --accent:#E08A3E; --accent-ink:#F3C596;
+    --p-alta:#6CBE8F; --p-alta-soft:#1D3226;
+    --p-media:#E0B458; --p-media-soft:#3A3016;
+    --p-baja:#E08080; --p-baja-soft:#3A2020;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#12160F; --surface:#191F16; --surface-2:#1F261B; --surface-3:#293321;
+  --ink:#E7EEE3; --ink-dim:#AEBBA6; --ink-faint:#7C8A77;
+  --line:#2C3626; --line-strong:#3C4A32;
+  --accent:#E08A3E; --accent-ink:#F3C596;
+  --p-alta:#6CBE8F; --p-alta-soft:#1D3226;
+  --p-media:#E0B458; --p-media-soft:#3A3016;
+  --p-baja:#E08080; --p-baja-soft:#3A2020;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',system-ui,sans-serif; font-size:15px; line-height:1.55;}
+.wrap{max-width:1140px; margin:0 auto; padding:28px 24px 100px;}
+h1,h2,h3{font-family:'Barlow Condensed',system-ui,sans-serif; font-weight:700; letter-spacing:.2px; text-wrap:balance; color:var(--ink); margin:0;}
+h1{font-size:38px; line-height:1.05;}
+h2{font-size:25px;}
+h3{font-size:17px;}
+.eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent-ink); font-weight:500;}
+.mono{font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums;}
+.muted{color:var(--ink-dim);}
+.faint{color:var(--ink-faint); font-size:13px;}
+header.top{padding-bottom:24px; margin-bottom:26px; border-bottom:1px solid var(--line); display:flex; flex-direction:column; gap:10px;}
+header.top .meta{display:flex; gap:16px; flex-wrap:wrap; margin-top:4px;}
+header.top .meta span{font-size:13px; color:var(--ink-dim);}
+header.top .meta b{color:var(--ink); font-weight:600;}
+section{margin-bottom:40px;}
+.sechead{margin-bottom:14px;}
+.callout{background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:15px 18px; font-size:13.5px; color:var(--ink-dim);}
+.callout b{color:var(--ink);}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+.stat{background:var(--surface); padding:15px 16px;}
+.stat .n{font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; line-height:1;}
+.stat .l{font-size:11.5px; color:var(--ink-dim); margin-top:4px;}
+.stat.accent .n{color:var(--accent-ink);}
+.catgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;}
+.catcard{background:var(--surface); border:1px solid var(--line); border-left:5px solid var(--cc); border-radius:10px; padding:14px 16px; box-shadow:var(--shadow);}
+.catcard .n{font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700; color:var(--cc);}
+.catcard .l{font-size:13px; color:var(--ink-dim);}
+table{width:100%; border-collapse:collapse; font-size:13.5px;}
+thead th{text-align:left; font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-dim); padding:9px 12px; border-bottom:2px solid var(--line-strong); background:var(--surface-2); position:sticky; top:0;}
+tbody td{padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+tbody tr:hover td{background:var(--surface-2);}
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface); box-shadow:var(--shadow);}
+.badge{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; padding:2px 9px; border-radius:99px; white-space:nowrap;}
+.dot{width:9px; height:9px; border-radius:50%; display:inline-block; flex:none;}
+.execband{display:flex; align-items:center; gap:10px; margin:24px 0 12px; padding:9px 4px 9px 0; border-bottom:1px solid var(--line);}
+.execband .execnum{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:22px; background:var(--surface-3); width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex:none;}
+.execband .execname{font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:20px;}
+.execband .execarea{font-size:12.5px; color:var(--ink-dim);}
+.daytabs{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+.daytab{font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:500; padding:6px 13px; border-radius:8px; border:1px solid var(--line); background:var(--surface); cursor:pointer; color:var(--ink-dim);}
+.daytab.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+.daypanel{display:none;}
+.daypanel.active{display:block;}
+.dayexecs{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:12px;}
+.dayexeccard{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:13px 15px; box-shadow:var(--shadow);}
+.dayexeccard.phase2{background:var(--surface-2); border-style:dashed;}
+.dayexeccard .head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;}
+.dayexeccard .head b{font-family:'Barlow Condensed',sans-serif; font-size:16px;}
+.dayexeccard .time{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink-faint);}
+.dayexeccard ol{margin:8px 0 0; padding-left:18px; font-size:12.5px;}
+.dayexeccard ol li{margin-bottom:4px;}
+.dayexeccard .n{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint); width:34px; display:inline-block;}
+.controls{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; align-items:center;}
+.controls input[type=search]{font-family:'IBM Plex Sans'; font-size:13px; padding:8px 12px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink); min-width:220px;}
+.chip{font-size:12px; padding:5px 11px; border-radius:99px; border:1px solid var(--line); background:var(--surface); cursor:pointer; color:var(--ink-dim); font-weight:500;}
+.chip.active{background:var(--ink); border-color:var(--ink); color:var(--bg);}
+.progress{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink-dim); margin-left:auto;}
+.progress b{color:var(--accent-ink);}
+.matrix td.name{white-space:normal; font-weight:500;}
+.matrix td.rubro{white-space:normal; font-size:12.5px; color:var(--ink-dim); max-width:260px;}
+.matrix input[type=checkbox]{width:17px; height:17px; accent-color:var(--p-alta); cursor:pointer;}
+tr.visited td{opacity:.45; text-decoration:line-through; text-decoration-color:var(--ink-faint);}
+tr.visited td.chk{text-decoration:none;}
+.legend{display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--ink-dim); margin-top:10px;}
+.legend span{display:inline-flex; align-items:center; gap:5px;}
+footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint);}
+details{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 16px;}
+details summary{cursor:pointer; font-weight:600; font-size:13.5px;}
+details ul{margin:10px 0 0; padding-left:20px; font-size:12.5px; color:var(--ink-dim); columns:2; column-gap:24px;}
+@media print{.daytabs, .controls{display:none!important;} .daypanel{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">Fexpocruz &middot; Filtro sectorial verificado</div>
+  <h1>Barrido industrial &mdash; Expocruz 2026</h1>
+  <p class="muted" style="max-width:640px;">Subconjunto del plano general, filtrado a las empresas de rubro <b>agroindustrial, industria, construcci&oacute;n o metalmec&aacute;nica</b>, confirmado con una b&uacute;squeda web real por empresa (no por inferencia del nombre).</p>
+  <div class="meta">
+    <span><b>49 empresas</b> objetivo</span>
+    <span><b>2 ejecutivos</b></span>
+    <span><b>3 d&iacute;as</b> para cobertura 100%</span>
+    <span><b>19:00&ndash;22:00</b> &middot; visita de 15 min</span>
+  </div>
+</header>
+
+<section>
+  <div class="sechead"><div class="eyebrow">01</div><h2>De 148 a 49</h2></div>
+  <div class="stats">
+    <div class="stat accent"><div class="n mono">49</div><div class="l">Empresas del rubro objetivo</div></div>
+    <div class="stat"><div class="n mono">148</div><div class="l">Empresas revisadas en el plano</div></div>
+    <div class="stat"><div class="n mono">99</div><div class="l">Descartadas (otro rubro)</div></div>
+    <div class="stat"><div class="n mono">2</div><div class="l">Ejecutivos</div></div>
+    <div class="stat"><div class="n mono">3</div><div class="l">D&iacute;as h&aacute;biles (1&ordf; pasada)</div></div>
+    <div class="stat"><div class="n mono">36</div><div class="l">Confianza alta</div></div>
+  </div>
+  <br>
+  <div class="callout">
+    <b>C&oacute;mo se verific&oacute;:</b> cada una de las 148 empresas del plano se busc&oacute; individualmente en Google (una b&uacute;squeda por empresa) para confirmar su actividad real, en vez de usar la inferencia original a partir del nombre. De esas, 49 corresponden a agroindustrial/industria/construcci&oacute;n/metalmec&aacute;nica; las 99 restantes son bancos, gastronom&iacute;a, medios, concesionarios de veh&iacute;culos livianos, gremios no industriales, cadenas de retail, etc. &mdash; fuera del alcance pedido. 2 de las 49 (Nibol, ambas ubicaciones) quedaron con <b>confianza baja</b>: son importadoras de maquinaria, no fabricantes, revisar si aplican igual.
+  </div>
+  <br>
+  <div class="catgrid">
+    <div class="catcard" style="--cc:#4C8C5C"><div class="n">23</div><div class="l">Agroindustrial</div></div>
+    <div class="catcard" style="--cc:#4472A8"><div class="n">18</div><div class="l">Industria</div></div>
+    <div class="catcard" style="--cc:#A85B3F"><div class="n">5</div><div class="l">Construcci&oacute;n</div></div>
+    <div class="catcard" style="--cc:#6F5EA7"><div class="n">3</div><div class="l">Metalmec&aacute;nica</div></div>
+  </div>
+</section>
+
+<section id="operativo">
+  <div class="sechead"><div class="eyebrow">02</div><h2>Plan operativo &middot; 10 d&iacute;as</h2><p class="muted">D&iacute;as 1&ndash;3: primera pasada completa. Visitas de 15 min (perfil prioritario) + 3 min de desplazamiento. D&iacute;as 4&ndash;10: profundizaci&oacute;n comercial &mdash; segunda visita, negociaci&oacute;n, cierre.</p></div>
+  <div class="daytabs" id="daytabs"></div>
+  <div id="daypanels"></div>
+</section>
+
+<section id="matrizctrl">
+  <div class="sechead"><div class="eyebrow">03</div><h2>Matriz de control</h2><p class="muted">El estado se guarda en este navegador.</p></div>
+  <div class="controls">
+    <input type="search" id="search" placeholder="Buscar empresa...">
+    <button class="chip active" data-filter-cat="all">Todas</button>
+    <span id="catchips"></span>
+    <button class="chip" data-filter-vis="pending">Pendientes</button>
+    <span class="progress" id="progress"></span>
+  </div>
+  <div class="tablewrap">
+  <table class="matrix">
+    <thead><tr><th></th><th>Empresa</th><th>Categor&iacute;a</th><th>Rubro real (verificado)</th><th>Ejecutivo</th><th>D&iacute;a</th><th>Confianza</th></tr></thead>
+    <tbody id="matrixbody"></tbody>
+  </table>
+  </div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--p-alta)"></i> Confianza alta</span>
+    <span><i class="dot" style="background:var(--p-media)"></i> Confianza media</span>
+    <span><i class="dot" style="background:var(--p-baja)"></i> Confianza baja &mdash; validar</span>
+  </div>
+</section>
+
+<section>
+  <div class="sechead"><div class="eyebrow">04</div><h2>Empresas descartadas</h2></div>
+  <details>
+    <summary>Ver las 99 empresas del plano que NO son agroindustrial/industria/construcci&oacute;n/metalmec&aacute;nica</summary>
+    <ul id="excludedlist"></ul>
+  </details>
+</section>
+
+<footer>Derivado del plan de barrido general de Expocruz 2026. Rubros confirmados con b&uacute;squeda web real (Google), una consulta por empresa &mdash; no inferidos del nombre.</footer>
+</div>
+
+<script>
+const PLAN = [{"exec_id": 1, "day": 1, "order": 1, "time": "19:00", "zone": "Z1", "name": "Univet", "categoria": "agroindustrial", "rubro": "Comercialización de productos e insumos veterinarios (antibióticos, suplementos para ganado lechero)", "confianza": "alta", "fuente": "publiagro.com.bo y Facebook (Univet SRL, univet.com.bo) confirman venta de productos veterinarios para ganaderos"}, {"exec_id": 1, "day": 1, "order": 2, "time": "19:18", "zone": "Z1", "name": "Frigor", "categoria": "agroindustrial", "rubro": "Frigorífico: faenado de bovinos/porcinos y producción de carne molida y deshuesada para exportación", "confianza": "alta", "fuente": "frigorificosantacruzsa.com y EMIS confirman que es un matadero-frigorífico (Matadero Frigorifico Santa Cruz S.A. Frigor)"}, {"exec_id": 1, "day": 1, "order": 3, "time": "19:36", "zone": "Z2", "name": "Grupo Monica", "categoria": "agroindustrial", "rubro": "Grupo agroindustrial ganadero: fábrica de productos biológicos para ganadería y genética cebuina (embriones, ganadería intensiva)", "confianza": "alta", "fuente": "publiagro.com.bo confirma fábrica de productos biológicos en Pailón, Santa Cruz, y actividad agroindustrial/ganadera"}, {"exec_id": 1, "day": 1, "order": 4, "time": "19:54", "zone": "Z2", "name": "Spartan", "categoria": "industria", "rubro": "Fabricación/comercialización de desinfectantes, desengrasantes, desincrustantes y químicos de limpieza (Spartan de Bolivia SRL)", "confianza": "alta", "fuente": "fexpocruz.com.bo (Spartan de Bolivia SRL, expositor en productos químicos de limpieza)"}, {"exec_id": 1, "day": 1, "order": 5, "time": "20:12", "zone": "Z2", "name": "Union Agronegocios", "categoria": "agroindustrial", "rubro": "Importación/distribución de insumos agropecuarios y servicios veterinarios; produce Nitropec (urea de liberación lenta) en planta propia", "confianza": "alta", "fuente": "publiagro.com.bo y unionagronegocios.evaluar.com confirman insumos agropecuarios y producción de fertilizante propio"}, {"exec_id": 1, "day": 1, "order": 6, "time": "20:30", "zone": "Z2", "name": "Linseg", "categoria": "agroindustrial", "rubro": "Comercialización de cercos eléctricos y soluciones tecnológicas para ganadería (empresa de origen peruano con sucursal en Santa Cruz)", "confianza": "media", "fuente": "agrosinergia.com.bo y laboral.infocalscz.edu.bo (LINSEG AGRO) describen cercos eléctricos para ganado como insumo agropecuario"}, {"exec_id": 1, "day": 1, "order": 7, "time": "20:48", "zone": "Z2", "name": "Golden", "categoria": "industria", "rubro": "Marca de cerveza de Cervecería Boliviana Nacional S.A. (CBN)", "confianza": "alta", "fuente": "fexpocruz.com.bo (Cerveceria Boliviana Nacional SA - Golden), categoría alimentos y bebidas"}, {"exec_id": 1, "day": 1, "order": 8, "time": "21:06", "zone": "Z2", "name": "Agromel", "categoria": "agroindustrial", "rubro": "Fabricación/distribución de premezclas, núcleos vitamínico-minerales, insumos veterinarios y repuestos para equipos de ordeño", "confianza": "alta", "fuente": "dnb.com y agropecuaria.gnb.com.bo confirman insumos agropecuarios/veterinarios y equipos industriales para el sector"}, {"exec_id": 1, "day": 1, "order": 9, "time": "21:24", "zone": "Z2", "name": "Labeet", "categoria": "agroindustrial", "rubro": "Laboratorio veterinario (productos y tratamientos para mascotas/parásitos)", "confianza": "media", "fuente": "Facebook 'Laboratorio Veterinario Labeet SC' confirma laboratorio veterinario en Santa Cruz"}, {"exec_id": 1, "day": 1, "order": 10, "time": "21:42", "zone": "Z2", "name": "Fridosa", "categoria": "agroindustrial", "rubro": "Frigorífico Del Oriente S.A.: faenado de ganado y producción de embutidos, hamburguesas y cortes envasados al vacío", "confianza": "alta", "fuente": "scribd.com y EMIS confirman que Fridosa es un frigorífico/planta procesadora de carne en Santa Cruz"}, {"exec_id": 1, "day": 2, "order": 1, "time": "19:00", "zone": "Z2", "name": "Agrimaster", "categoria": "agroindustrial", "rubro": "Distribución de insumos agropecuarios: semillas, agroquímicos, fertilizantes, maquinaria agrícola y sales minerales", "confianza": "alta", "fuente": "fexpocruz.com.bo (Agrimaster SRL) y cladera.org confirman distribución de insumos agropecuarios/veterinarios"}, {"exec_id": 1, "day": 2, "order": 2, "time": "19:18", "zone": "Z2", "name": "Ben Buster", "categoria": "agroindustrial", "rubro": "Fabricación de maquinaria agrícola: mixers/mezcladores de forraje, molinos de heno, tolvas autodescargables, aros de acero y trituradores de rastrojo", "confianza": "alta", "fuente": "benbuster.com confirma que es una empresa boliviana fabricante de maquinaria agrícola con planta y tecnología CNC"}, {"exec_id": 1, "day": 2, "order": 3, "time": "19:36", "zone": "Z3", "name": "BFC", "categoria": "agroindustrial", "rubro": "Frigorífico BFC S.A. - planta de faenado y procesamiento de carne bovina en San Ignacio de Velasco, Santa Cruz", "confianza": "alta", "fuente": "El Deber, D&B Business Directory - frigorífico"}, {"exec_id": 1, "day": 2, "order": 4, "time": "19:54", "zone": "Z3", "name": "Ferrotodo", "categoria": "metalmecanica", "rubro": "Industria Metalúrgica Ferrotodo - fabricación y comercialización de aceros, estructuras metálicas y herramientas desde 1981", "confianza": "alta", "fuente": "LinkedIn (Industrias Ferrotodo Ltda.), EMIS (Industria Metalurgica Ferrotodo S.A.), Amerpages"}, {"exec_id": 1, "day": 2, "order": 5, "time": "20:12", "zone": "Z3", "name": "Paceña", "categoria": "industria", "rubro": "Marca de cerveza de Cervecería Boliviana Nacional (CBN), con planta de producción en Santa Cruz desde 1992", "confianza": "alta", "fuente": "Wikipedia, cbn.bo - industria cervecera/bebidas"}, {"exec_id": 1, "day": 2, "order": 6, "time": "20:30", "zone": "Z3", "name": "Huari", "categoria": "industria", "rubro": "Marca de cerveza premium de Cervecería Boliviana Nacional (CBN)", "confianza": "alta", "fuente": "cbn.bo, huari.bo - industria cervecera"}, {"exec_id": 1, "day": 2, "order": 7, "time": "20:48", "zone": "Z3", "name": "YPFB", "categoria": "industria", "rubro": "Yacimientos Petrolíferos Fiscales Bolivianos - empresa estatal de exploración, explotación, refinación e industrialización de hidrocarburos", "confianza": "alta", "fuente": "ypfb.gob.bo, Wikipedia - industria petrolera/energía"}, {"exec_id": 1, "day": 2, "order": 8, "time": "21:06", "zone": "Z3", "name": "Grass Cutter", "categoria": "agroindustrial", "rubro": "Marca de maquinaria agrícola (desmalezadoras, fertilizadoras) de origen argentino, comercializada en la región", "confianza": "media", "fuente": "grasscutter.com.ar, Agrofy/Agroads - fabricante de maquinaria agrícola; no se confirmó representante específico en Bolivia"}, {"exec_id": 1, "day": 2, "order": 9, "time": "21:24", "zone": "Z3", "name": "Profimar", "categoria": "metalmecanica", "rubro": "Proveedor de filtros, mangueras y repuestos industriales (WIX, Donaldson, Fleetguard, Aeroquip, Eaton) para sectores agro, construcción e industrial en Santa Cruz", "confianza": "media", "fuente": "Facebook (profimarltda), amarillas.bo - distribuidor de insumos/repuestos industriales, no fabricante"}, {"exec_id": 1, "day": 2, "order": 10, "time": "21:42", "zone": "Z3", "name": "Kortabaco", "categoria": "industria", "rubro": "Grupo tabacalero (Kortabaco Group), socio estratégico de KT&G, fabricación/importación y comercialización de cigarrillos en Bolivia y la región", "confianza": "media", "fuente": "El Deber, ZoomInfo - industria tabacalera"}, {"exec_id": 1, "day": 3, "order": 1, "time": "19:00", "zone": "Z3", "name": "Biotal", "categoria": "agroindustrial", "rubro": "Importación, comercialización y fabricación de equipos e insumos para la industria láctea (yogures, quesos) desde 1994", "confianza": "alta", "fuente": "Facebook (biotalsrl), biz-manager.com - insumos y equipos para industria láctea"}, {"exec_id": 1, "day": 3, "order": 2, "time": "19:18", "zone": "Z4", "name": "Ciudad Nueva Santa Cruz", "categoria": "construccion", "rubro": "Megaproyecto inmobiliario/urbanístico \"Nueva Santa Cruz\" desarrollado por Grupo Empresarial Lafuente, ciudad inteligente de ~6.000 hectáreas", "confianza": "alta", "fuente": "nuevasantacruz.com, Los Tiempos - desarrollo inmobiliario/urbanización"}, {"exec_id": 1, "day": 3, "order": 3, "time": "19:36", "zone": "Z4", "name": "Helados Cabrera", "categoria": "industria", "rubro": "Industrias Alimenticias Cabrera - planta de producción en el Parque Industrial de Santa Cruz; elaboración de helados y bebidas de frutas naturales", "confianza": "alta", "fuente": "industriasalimenticiascabrera.com - industria alimentaria con planta de producción"}, {"exec_id": 2, "day": 1, "order": 1, "time": "19:00", "zone": "Z5", "name": "Mabel's", "categoria": "industria", "rubro": "Fabricante de galletas y productos horneados (Industrias Alimenticias Fagal SRL, marca Mabel's)", "confianza": "alta", "fuente": "Los Tiempos / agronews.com.bo: fábrica de galletas en el parque industrial de Santa Cruz, ~20.000 ton/año"}, {"exec_id": 2, "day": 1, "order": 2, "time": "19:18", "zone": "Z5", "name": "Osfim", "categoria": "agroindustrial", "rubro": "Fabricación de embutidos y fiambres (cecinas de cerdo, res y pollo)", "confianza": "alta", "fuente": "gnb.com.bo (Guía de Negocios Bolivia, rubro Industria/agroindustria) y osfimbo.com: planta de producción de fiambres y embutidos"}, {"exec_id": 2, "day": 1, "order": 3, "time": "19:36", "zone": "Z5", "name": "PIL", "categoria": "agroindustrial", "rubro": "Industria láctea (PIL Andina S.A., planta industrial de lácteos en Santa Cruz)", "confianza": "alta", "fuente": "pilbolivia.com.bo / Opinión: planta industrial de leche, yogurt, queso en Santa Cruz de la Sierra"}, {"exec_id": 2, "day": 1, "order": 4, "time": "19:54", "zone": "Z5", "name": "Sofia", "categoria": "agroindustrial", "rubro": "Industria avícola y porcina: producción de pollo, cerdo y embutidos (Sofía Ltda.)", "confianza": "alta", "fuente": "sofia.com.bo / Opinión: empresa líder de la industria alimenticia boliviana, avícola y porcina"}, {"exec_id": 2, "day": 1, "order": 5, "time": "20:12", "zone": "Z5", "name": "Total Pec", "categoria": "agroindustrial", "rubro": "Fabricación de alimentos balanceados y nutrición animal (Totalpec S.R.L.)", "confianza": "alta", "fuente": "Facebook Totalpec / D&B: Animal Food Manufacturing, planta en Santa Cruz de la Sierra"}, {"exec_id": 2, "day": 1, "order": 6, "time": "20:30", "zone": "Z5", "name": "Guabira", "categoria": "agroindustrial", "rubro": "Ingenio azucarero (Ingenio Azucarero Guabirá, producción de azúcar y alcohol)", "confianza": "alta", "fuente": "Facebook Azúcar Guabirá / Wikipedia: mayor fábrica de azúcar y alcohol de Bolivia, en Montero, Santa Cruz"}, {"exec_id": 2, "day": 1, "order": 7, "time": "20:48", "zone": "Z6", "name": "Saci", "categoria": "agroindustrial", "rubro": "Comercializadora/distribuidora de maquinaria agrícola, equipos de construcción y automóviles (Sociedad Anónima Comercial Industrial - SACI)", "confianza": "media", "fuente": "economy.com.bo / D&B: unidad de negocio agrícola con tractores, cosechadoras y pulverizadoras (maquinaria agrícola)"}, {"exec_id": 2, "day": 1, "order": 8, "time": "21:06", "zone": "Z6", "name": "Ende", "categoria": "industria", "rubro": "Empresa estatal de generación, transmisión y distribución eléctrica (ENDE Corporación)", "confianza": "alta", "fuente": "ende.bo / ABI: empresa nacional de electricidad, parques eólicos en Santa Cruz"}, {"exec_id": 2, "day": 1, "order": 9, "time": "21:24", "zone": "Z6", "name": "Cofadena", "categoria": "construccion", "rubro": "Corporación de las Fuerzas Armadas para el Desarrollo Nacional; unidad productiva de maquinaria para construcción y rehabilitación de caminos/infraestructura", "confianza": "media", "fuente": "Facebook Unidad Productiva Cofadena-Maquinaria Santa Cruz / diputados.gob.bo: maquinaria para reconstrucción y rehabilitación vial"}, {"exec_id": 2, "day": 1, "order": 10, "time": "21:42", "zone": "Z6", "name": "Mainter", "categoria": "agroindustrial", "rubro": "Distribuidor de maquinaria agrícola, agroquímicos y motores Perkins (Mainter SRL)", "confianza": "alta", "fuente": "perkins.com / Facebook Mainter: maquinaria agrícola, agroquímicos, distribuidor oficial Perkins en Bolivia"}, {"exec_id": 2, "day": 2, "order": 1, "time": "19:00", "zone": "Z7", "name": "Machobol", "categoria": "industria", "rubro": "Fabricación de juegos infantiles de madera, portones y parquets (Maderas Chiquitana de Oriente Boliviano)", "confianza": "media", "fuente": "Los Tiempos / gnb.com.bo (rubro Industria y agroindustria): fabricación, venta e instalación de juegos de parques infantiles"}, {"exec_id": 2, "day": 2, "order": 2, "time": "19:18", "zone": "Z7", "name": "Unilever", "categoria": "industria", "rubro": "Multinacional de bienes de consumo masivo (alimentos, cuidado personal, limpieza); oficina/planta Unilever Andina Bolivia en Santa Cruz", "confianza": "media", "fuente": "careers.unilever.com / biz-manager.com: Unilever Andina Bolivia, oficina Edificio Cubo II en Santa Cruz (no se confirmó con certeza planta de manufactura local vs. oficina comercial)"}, {"exec_id": 2, "day": 2, "order": 3, "time": "19:36", "zone": "Z8", "name": "Muebles Hurtado", "categoria": "industria", "rubro": "Fabricación de muebles de hogar y oficina (planta industrial de 15.000 m² en el parque industrial de Santa Cruz)", "confianza": "alta", "fuente": "muebleshurtado.com / SlideShare (auditoría industrias de muebles Santa Cruz): industria mueblera con maquinaria europea"}, {"exec_id": 2, "day": 2, "order": 4, "time": "19:54", "zone": "Z8", "name": "Laboratorios Bago", "categoria": "industria", "rubro": "Laboratorio farmacéutico (fabricación y comercialización de medicamentos)", "confianza": "alta", "fuente": "bago.com.bo y Fexpocruz confirman planta de producción nacional y comercialización de medicamentos en Bolivia desde 1978"}, {"exec_id": 2, "day": 2, "order": 5, "time": "20:12", "zone": "Z8", "name": "Remax", "categoria": "construccion", "rubro": "Inmobiliaria (bienes raíces, franquicia internacional)", "confianza": "alta", "fuente": "remax.bo y páginas oficiales confirman servicios de venta/alquiler de bienes raíces en Santa Cruz"}, {"exec_id": 2, "day": 2, "order": 6, "time": "20:30", "zone": "Z8", "name": "Corimexo", "categoria": "industria", "rubro": "Fabricante de muebles institucionales (industria del mueble)", "confianza": "alta", "fuente": "Construex Bolivia y perfiles empresariales (LinkedIn, Diredi) describen a Corimexo S.A. como fábrica líder de muebles en Santa Cruz"}, {"exec_id": 2, "day": 2, "order": 7, "time": "20:48", "zone": "Z8", "name": "Amstel", "categoria": "industria", "rubro": "Cervecería (producción de cerveza, marca del grupo Heineken/BBO)", "confianza": "alta", "fuente": "Red Uno, Pulso Empresarial y eju.tv confirman que Amstel se produce en planta de Warnes, Santa Cruz, bajo BBO/Heineken"}, {"exec_id": 2, "day": 2, "order": 8, "time": "21:06", "zone": "Z8", "name": "Jardines del Norte", "categoria": "construccion", "rubro": "Urbanización / condominio residencial (desarrollo inmobiliario)", "confianza": "alta", "fuente": "jardinesdelnorte.com y Facebook oficial confirman que es un proyecto de urbanización/condominio en la zona norte de Santa Cruz"}, {"exec_id": 2, "day": 2, "order": 9, "time": "21:24", "zone": "Z8", "name": "Finesse", "categoria": "industria", "rubro": "Fabricante de papel higiénico (industria papelera, marca de Kupel/Empacar)", "confianza": "alta", "fuente": "El Día y Red Uno confirman que Finesse es una marca de papel higiénico producida por la planta Kupel (Empacar) en Santa Cruz"}, {"exec_id": 2, "day": 2, "order": 10, "time": "21:42", "zone": "Z8", "name": "Frigor Experiencia Tinto", "categoria": "agroindustrial", "rubro": "Frigorífico (matadero y procesamiento de carne bovina)", "confianza": "alta", "fuente": "frigorificosantacruzsa.com y Fexpocruz confirman que Frigor S.A. es un matadero-frigorífico (Parque Industrial Santa Cruz); \"Experiencia Tinto\" no se identificó como línea separada"}, {"exec_id": 2, "day": 3, "order": 1, "time": "19:00", "zone": "Z8", "name": "Luri", "categoria": "industria", "rubro": "Industrias Luri - fabricación de jabones, detergentes y productos de tocador", "confianza": "media", "fuente": "Dun & Bradstreet clasifica a Industrias Luri S.R.L. (Parque Industrial, Santa Cruz) en fabricación de jabones y productos de limpieza/tocador"}, {"exec_id": 2, "day": 3, "order": 2, "time": "19:18", "zone": "Z8", "name": "Arcor", "categoria": "industria", "rubro": "Industria alimentaria (fabricación de golosinas, chocolates, galletas - grupo Arcor Argentina)", "confianza": "alta", "fuente": "arcor.com y EMIS confirman que Arcor Alimentos Bolivia S.A. produce alimentos/confitería con sede en Santa Cruz desde 1989"}, {"exec_id": 2, "day": 3, "order": 3, "time": "19:36", "zone": "Z8", "name": "Hansa", "categoria": "construccion", "rubro": "Grupo diversificado con división Industria & Construcción (distribución de equipos industriales y de construcción), además de automotriz (VW) y salud", "confianza": "media", "fuente": "cadecocruz.org.bo y hansa.com.bo confirman la división 'Hansa Industria & Construcción', líder en distribución de equipos industriales y de construcción en Bolivia"}, {"exec_id": 2, "day": 3, "order": 4, "time": "19:54", "zone": "Z8", "name": "Las Lomas", "categoria": "metalmecanica", "rubro": "Producción de barras de acero corrugado (industria siderúrgica/metalmecánica) para construcción", "confianza": "alta", "fuente": "Fexpocruz (fexpocruz.com.bo/expositores-expocruz/las-lomas) describe a Las Lomas como productor de barras de acero corrugado bajo norma NB732"}, {"exec_id": 2, "day": 3, "order": 5, "time": "20:12", "zone": "Z8", "name": "Nibol (Zona 8a)", "categoria": "agroindustrial", "rubro": "Distribuidor de vehículos Nissan/UD Trucks/Volvo y maquinaria agrícola/construcción John Deere (importador, no fabricante)", "confianza": "baja", "fuente": "nibol.com.bo y EMIS confirman que Nibol Ltda. es distribuidor automotriz que también representa maquinaria agrícola John Deere; se asigna con baja confianza por ser principalmente concesionario"}, {"exec_id": 2, "day": 3, "order": 6, "time": "20:30", "zone": "Z8", "name": "Nibol (Zona 8b)", "categoria": "agroindustrial", "rubro": "Distribuidor de vehículos Nissan/UD Trucks/Volvo y maquinaria agrícola/construcción John Deere (importador, no fabricante)", "confianza": "baja", "fuente": "nibol.com.bo y EMIS confirman que Nibol Ltda. es distribuidor automotriz que también representa maquinaria agrícola John Deere; se asigna con baja confianza por ser principalmente concesionario"}];
+const ZONES = {"Z1": {"id": 1, "name": "Circuito Ganadero Norte", "streets": "Corrales de remate / Pista de Juzgamiento 1-2", "color": "#4C8C5C"}, "Z2": {"id": 1, "name": "Circuito Ganadero Oeste", "streets": "Calle Francisco Bernachi / Av. Soto", "color": "#8A9A3E"}, "Z3": {"id": 2, "name": "Circuito Suroeste", "streets": "Pab. 11-13 / Salón Chiquitano", "color": "#C98A3E"}, "Z4": {"id": 2, "name": "Circuito Centro-Parque", "streets": "Parque Ecológico / Escenario Principal", "color": "#3E9A82"}, "Z5": {"id": 3, "name": "Circuito Norte", "streets": "Pab. 8-10 / Patio de Comidas / Av. Bibosi norte", "color": "#4472A8"}, "Z6": {"id": 3, "name": "Circuito Noreste", "streets": "Pab. 5-7 / C. Sumuqué / Av. Guayacán", "color": "#6F5EA7"}, "Z7": {"id": 4, "name": "Circuito Este", "streets": "Pab. 3-4 / Av. Picana / C. Yesquero", "color": "#A85B3F"}, "Z8": {"id": 4, "name": "Circuito Sur / Sureste", "streets": "Pab. 1-2 / C. Quebracho / Av. Curupaú", "color": "#8A4B78"}};
+const CAT_LABEL = {"agroindustrial": "Agroindustrial", "industria": "Industria", "construccion": "Construcción", "metalmecanica": "Metalmecánica"};
+const CAT_COLOR = {"agroindustrial": "#4C8C5C", "industria": "#4472A8", "construccion": "#A85B3F", "metalmecanica": "#6F5EA7"};
+const EXEC_AREA = {"1": "Circuito Oeste — ganadería + suroeste + centro (Z1-Z4)", "2": "Circuito Este — norte + noreste + este + sur (Z5-Z8)"};
+const MAX_DAY_EXEC = {"1": 3, "2": 3};
+const EXCLUDED = [{"name": "Salon Guarani Centro de Remates", "rubro_real": "Salón/centro de remates ganaderos (venue para subastas de bovinos, ligado a Expocruz)"}, {"name": "Elitead", "rubro_real": "No identificado"}, {"name": "Comite Brahman", "rubro_real": "Comité/gremio de criadores de ganado de raza Brahman"}, {"name": "Brascampo", "rubro_real": "Tienda importadora de calzado (representante de la marca FlexFort y Zebu)"}, {"name": "Praxis", "rubro_real": "No identificado con certeza: existen dos empresas homónimas en Bolivia (Laboratorio Clínico Praxis, salud humana; y Praxis Ingeniería SRL, ingeniería estructural) y no se pudo confirmar cuál corresponde"}, {"name": "Somo", "rubro_real": "Bebida tradicional cruceña de maíz (no es una empresa, es un producto/tradición gastronómica callejera)"}, {"name": "Casa del Cebu", "rubro_real": "No identificado con certeza; probable pabellón/espacio del sector cebuino en Expocruz (junto a Asocebu, Fegasacruz en la lista)"}, {"name": "Of. Sector Pecuario", "rubro_real": "Oficina administrativa del sector pecuario dentro de Expocruz/Fexpocruz"}, {"name": "Asocebu", "rubro_real": "Asociación Boliviana de Criadores de Cebú (gremio ganadero)"}, {"name": "Fegasacruz", "rubro_real": "Federación de Ganaderos de Santa Cruz (gremio que agrupa 39 asociaciones ganaderas)"}, {"name": "Cabana Mucarzel", "rubro_real": "Cabaña/ganadería dedicada a la cría y genética de ganado Nelore (producción pecuaria, no procesamiento)"}, {"name": "Cabana El Trebol", "rubro_real": "Cabaña/ganadería enfocada en mejoramiento genético de ganado Cebú (cría, no procesamiento)"}, {"name": "Autobol", "rubro_real": "Concesionario de vehículos Honda (venta e importación de autos y repuestos)"}, {"name": "ABCM", "rubro_real": "Asociación Boliviana de Criadores de Caballos de Cuarto de Milla (gremio de criadores de caballos)"}, {"name": "Nelorek", "rubro_real": "Centro de difusión de genética y cría de ganado Nelore/Nelore Mocho (producción pecuaria, no procesamiento)"}, {"name": "Opal Pacifico", "rubro_real": "Importadora/distribuidora/mayorista de bebidas y productos manufacturados (Operaciones del Pacífico Ltda.)"}, {"name": "El Arriero", "rubro_real": "Restaurante/parrilla (steakhouse) en Equipetrol, Santa Cruz"}, {"name": "Bonita Brunch & Bar", "rubro_real": "Restaurante/bar de brunch y cócteles en Santa Cruz de la Sierra"}, {"name": "Fedeple - Casa del Lechero", "rubro_real": "Federación Departamental de Productores de Leche (gremio lechero); 'Casa del Lechero' es su espacio/pabellón en la feria"}, {"name": "Pacu", "rubro_real": "No identificado"}, {"name": "Fazenda", "rubro_real": "Restaurante tipo churrascaria (parrilla brasileña) en Santa Cruz de la Sierra"}, {"name": "Crown (Zona 2)", "rubro_real": "No identificado con certeza: existen varias empresas 'Crown' en Santa Cruz (concesionario Toyota, distribuidor de camiones/maquinaria Crown M&C, y la gestora de inversiones Andean Crown); no se pudo confirmar cuál corresponde"}, {"name": "Automovil Club Boliviano", "rubro_real": "Asociación sin fines de lucro de automovilismo, escuela de manejo y trámites de licencias (no es empresa comercial/industrial)"}, {"name": "Fundacion Simon Patino", "rubro_real": "Fundación cultural y educativa sin fines de lucro (arte, pedagogía, agroecología, cultura)"}, {"name": "Raizzer", "rubro_real": "No identificado en Bolivia; el único 'Raizzer' encontrado es una empresa brasileña de capacitación/consultoría en Business Intelligence y Big Data, sin relación aparente con Santa Cruz/Expocruz"}, {"name": "Raptor", "rubro_real": "No identificado"}, {"name": "Signature Burgers", "rubro_real": "Cadena/local de hamburguesas gourmet (Autoria Signature Burger) en Santa Cruz"}, {"name": "Fogon de Gringo", "rubro_real": "Restaurante/churrasquería de comida tarijeña (parrilla), con sucursal en Santa Cruz"}, {"name": "Salon Chiquitano", "rubro_real": "Salón de eventos/pabellón principal del predio ferial Fexpocruz (Av. Roca y Coronado), usado para lanzamientos y cocteles"}, {"name": "Colegio de Odontologos SC", "rubro_real": "Colegio profesional que regula el ejercicio de la odontología en Santa Cruz (gremio profesional)"}, {"name": "Hook Peon", "rubro_real": "No identificado"}, {"name": "Christian Automotors (Zona 3)", "rubro_real": "Concesionario/distribuidor oficial de vehículos Ford (y tractores Valtra) en Bolivia; importación y comercialización desde 1989"}, {"name": "Provicampo", "rubro_real": "No identificado"}, {"name": "ZYN", "rubro_real": "Marca de bolsitas de nicotina sin tabaco (Philip Morris), venta/distribución en Bolivia"}, {"name": "Juventud Empresa", "rubro_real": "Asociación de jóvenes empresarios y profesionales de Santa Cruz (gremio/red de networking empresarial)"}, {"name": "Takenos", "rubro_real": "Fintech - billetera digital/wallet móvil, con oficina comercial en Santa Cruz"}, {"name": "Comite Civico Pro Santa Cruz", "rubro_real": "Organización cívica regional (Comité Cívico Pro Santa Cruz)"}, {"name": "Davosan", "rubro_real": "Fundación Davosan (Damas Voluntarias de Santa Cruz) - asistencia social y médica humanitaria"}, {"name": "Vaca Fria", "rubro_real": "Cadena/franquicia de heladerías artesanales con múltiples sucursales en Santa Cruz"}, {"name": "Yango Family", "rubro_real": "Aplicación de transporte tipo taxi (Yango), con oficina en Santa Cruz"}, {"name": "Comite Civico Femenino", "rubro_real": "Comité Cívico Femenino de Santa Cruz - organización cívica de mujeres (ONG)"}, {"name": "Patio de Comidas (18 marcas)", "rubro_real": "Espacio de patio de comidas del predio ferial Fexpocruz, con múltiples marcas gastronómicas"}, {"name": "Corner 401 Marlboro", "rubro_real": "No identificado con precisión; por el nombre parece un espacio/stand patrocinado por la marca de cigarrillos Marlboro dentro del predio ferial"}, {"name": "Oficinas CAO", "rubro_real": "Cámara Agropecuaria del Oriente (CAO) - gremio que agrupa 18 asociaciones de productores agropecuarios y agroindustriales de Santa Cruz"}, {"name": "CRE", "rubro_real": "Cooperativa Rural de Electrificación - mayor distribuidora de electricidad de Bolivia (servicio público cooperativo)"}, {"name": "Saguapac", "rubro_real": "Cooperativa de Servicios Públicos Santa Cruz - agua potable y alcantarillado sanitario"}, {"name": "Ecor", "rubro_real": "Empresa de Comunicaciones del Oriente - grupo de medios (radio, propietaria de la red de TV Unitel)"}, {"name": "Tiendas 3B", "rubro_real": "Cadena de tiendas/supermercados de descuento nacida en Santa Cruz"}, {"name": "La Happy Hour", "rubro_real": "No identificado"}, {"name": "Chavela", "rubro_real": "Carnicería / venta minorista de carnes (Carnicería \"Chavela\")"}, {"name": "Adepor", "rubro_real": "Gremio: Asociación Departamental de Porcicultores de Santa Cruz (agrupa productores de cerdo, no es empresa productiva)"}, {"name": "Banco Union", "rubro_real": "Banco estatal (Banco Unión S.A.)"}, {"name": "Viajes Travelero", "rubro_real": "Agencia de viajes y turismo"}, {"name": "Banco Sol", "rubro_real": "Banco de microfinanzas (BancoSol)"}, {"name": "Hero Sport", "rubro_real": "Concesionario/distribuidor de motocicletas Hero"}, {"name": "Toyosa (Zona Norte)", "rubro_real": "Concesionario/distribuidor oficial de Toyota, Lexus, Yamaha y equipos Toyosa"}, {"name": "Working Style", "rubro_real": "Tienda de ropa / moda masculina (comercio minorista)"}, {"name": "Bolivian Fitness", "rubro_real": "Venta de suplementos deportivos importados (Bolivia Fitness Nutrigroup S.R.L.)"}, {"name": "Fremar", "rubro_real": "Comercio general / tienda por departamentos (Fremar Ltda., Fremar Montaño)"}, {"name": "Supercars", "rubro_real": "Importador/concesionario de vehículos eléctricos y de lujo (SuperCars Bolivia)"}, {"name": "Rodobol", "rubro_real": "Importadora de equipo de transporte terrestre: camiones, semirremolques y repuestos (Importadora Rodobol Ltda.)"}, {"name": "Marshall", "rubro_real": "Venta de equipos e instrumentos musicales (amplificadores Marshall), tienda de música"}, {"name": "Christian Automotors (Zona 6)", "rubro_real": "Concesionario oficial de vehículos Ford y tractores Valtra"}, {"name": "JH Investments", "rubro_real": "Servicios financieros: transferencias internacionales y compra-venta de criptoactivos (JH Safe Investments)"}, {"name": "Imcruz (Zona 6)", "rubro_real": "Concesionario/comercializador de vehículos (Suzuki y otras marcas) - Imcruz Comercial S.A."}, {"name": "Interauto", "rubro_real": "No identificado"}, {"name": "Jetay Seven", "rubro_real": "No identificado con certeza (posible venta de bicicletas eléctricas / e-bikes)"}, {"name": "Csapek", "rubro_real": "Distribuidor/representante de lubricantes Amalie y filtros Millard (M. Csapek S.A.)"}, {"name": "Reineke Fuchs", "rubro_real": "Restaurante/biergarten de comida alemana"}, {"name": "Kawamoto", "rubro_real": "Concesionario de motocicletas, cuatriciclos y motos acuáticas Kawasaki"}, {"name": "Triplex", "rubro_real": "Importador/distribuidor de electrodomésticos y línea blanca (Electrolux, White-Westinghouse, etc.)"}, {"name": "Academia Tahuichi", "rubro_real": "Academia deportiva de fútbol sin fines de lucro (Academia Tahuichi Aguilera)"}, {"name": "Directo", "rubro_real": "No identificado"}, {"name": "Viaggio Motors", "rubro_real": "Concesionario/representante oficial de vehículos GAC Motor y motos Ducati (Viaggio Motor S.A.)"}, {"name": "Honda Hero", "rubro_real": "Concesionario/distribuidor de motocicletas Honda y Hero"}, {"name": "Taiyo Motors", "rubro_real": "Concesionario/representante oficial de vehículos Nissan, motos UM Motos/Motomel y equipos Kärcher"}, {"name": "Imcruz (Zona 7)", "rubro_real": "Concesionario/comercializador de vehículos (Suzuki y otras marcas) - Imcruz Comercial S.A."}, {"name": "ATB", "rubro_real": "Canal de televisión / medio de comunicación (Red ATB)"}, {"name": "Banco Mercantil Santa Cruz", "rubro_real": "Banco comercial"}, {"name": "Banco Ganadero", "rubro_real": "Banco comercial"}, {"name": "Los Tajibos", "rubro_real": "Hotel y centro de convenciones"}, {"name": "Banco Prodem", "rubro_real": "Banco / institución de microfinanzas"}, {"name": "Crown (Zona 8)", "rubro_real": "Concesionario de vehículos Toyota (venta de autos, no fabricante)"}, {"name": "Toyosa (Zona Sur)", "rubro_real": "Concesionario/distribuidor oficial de Toyota, Lexus y Yamaha (no fabricante)"}, {"name": "Rodaria", "rubro_real": "Concesionario/comercializador de camiones ZNA, DongFeng y semirremolques Randon (no fabricante)"}, {"name": "Astara Ovando", "rubro_real": "Concesionario de vehículos (Mercedes-Benz, Jeep, RAM, Fiat, Mitsubishi) - grupo Astara, no fabricante"}, {"name": "Autosud Kia", "rubro_real": "Concesionario oficial de la marca Kia (venta de vehículos, no fabricante)"}, {"name": "El Deber", "rubro_real": "Periódico / medio de comunicación"}, {"name": "Bolivian Automotors", "rubro_real": "Importador/concesionario de vehículos Chevrolet, Peugeot, Citroën, Forland (no fabricante)"}, {"name": "Global Abraxas Motors", "rubro_real": "Distribuidor de vehículos asiáticos (Baic, ZX Auto, KYC, Kenbo) - importador, no fabricante"}, {"name": "Andar Motors", "rubro_real": "Concesionario de vehículos BMW (importación y comercialización, no fabricante)"}, {"name": "Carmax", "rubro_real": "Concesionario oficial de Hyundai e Isuzu (venta de vehículos, no fabricante)"}, {"name": "Gigavision", "rubro_real": "Canal de televisión / red de noticias"}, {"name": "Electro Hogar", "rubro_real": "Tienda de electrodomésticos (venta minorista, no fabricante)"}, {"name": "Red Uno", "rubro_real": "Canal de televisión / medio de comunicación"}, {"name": "Moxos", "rubro_real": "Grupo Moxos - importador y comercializador de motocicletas y electrodomésticos (venta al crédito, no fabricante)"}, {"name": "Entel", "rubro_real": "Empresa de telecomunicaciones (telefonía móvil, internet, fibra óptica)"}, {"name": "Din Kong Resort Park", "rubro_real": "Parque temático/recreativo (parque de dinosaurios y turismo, ubicado en Cochabamba)"}, {"name": "General Automotors", "rubro_real": "Concesionario de vehículos (Tesla, 212, Deepal, SWM, Shineray) - venta, no fabricante"}];
+
+function confBadge(c){
+  const map = {alta:['p-alta','Alta'], media:['p-media','Media'], baja:['p-baja','Baja']};
+  const [cls,label] = map[c] || ['p-media', c];
+  return `<span class="badge" style="background:var(--${cls}-soft); color:var(--${cls});"><i class="dot" style="background:var(--${cls})"></i>${label}</span>`;
+}
+function catBadge(cat){
+  const color = CAT_COLOR[cat];
+  return `<span class="badge" style="background:${color}22; color:${color};">${CAT_LABEL[cat]}</span>`;
+}
+
+// day tabs
+const daytabs = document.getElementById('daytabs');
+const daypanels = document.getElementById('daypanels');
+let tabsHtml='', panelsHtml='';
+for(let d=1; d<=10; d++){
+  tabsHtml += `<button class="daytab${d===1?' active':''}" data-day="${d}">D\u00eda ${d}</button>`;
+  let cardsHtml='';
+  [1,2].forEach(eid=>{
+    const items = PLAN.filter(r=>r.exec_id===eid && r.day===d);
+    if(items.length>0){
+      const zoneNames = [...new Set(items.map(i=>ZONES[i.zone].name))].join(' + ');
+      cardsHtml += `<div class="dayexeccard">
+        <div class="head"><b>Ejecutivo ${eid}</b><span class="time">${items[0].time}\u2013${items[items.length-1].time}</span></div>
+        <div class="faint" style="margin-bottom:8px;">${zoneNames}</div>
+        <ol>${items.map(i=>`<li><span class="n">${i.time}</span>${i.name} ${catBadge(i.categoria)}</li>`).join('')}</ol>
+      </div>`;
+    } else {
+      cardsHtml += `<div class="dayexeccard phase2">
+        <div class="head"><b>Ejecutivo ${eid}</b><span class="time">19:00\u201322:00</span></div>
+        <div class="faint">${EXEC_AREA[eid]}</div>
+        <p class="faint" style="margin-top:8px;">Fase 2: segunda visita a las empresas ya contactadas (negociaci\u00f3n, seguimiento comercial), con conversaciones m\u00e1s largas.</p>
+      </div>`;
+    }
+  });
+  panelsHtml += `<div class="daypanel${d===1?' active':''}" data-day="${d}"><div class="dayexecs">${cardsHtml}</div></div>`;
+}
+daytabs.innerHTML = tabsHtml;
+daypanels.innerHTML = panelsHtml;
+daytabs.addEventListener('click', e=>{
+  const btn = e.target.closest('.daytab');
+  if(!btn) return;
+  const day = btn.dataset.day;
+  document.querySelectorAll('.daytab').forEach(b=>b.classList.toggle('active', b===btn));
+  document.querySelectorAll('.daypanel').forEach(p=>p.classList.toggle('active', p.dataset.day===day));
+});
+
+// matrix
+let visited = {};
+try{ visited = JSON.parse(localStorage.getItem('expocruz_industrial_visited')||'{}'); }catch(e){}
+function saveVisited(){ try{ localStorage.setItem('expocruz_industrial_visited', JSON.stringify(visited)); }catch(e){} }
+PLAN.forEach((r,idx)=>{ r._id = idx; });
+
+const catchips = document.getElementById('catchips');
+catchips.innerHTML = Object.keys(CAT_LABEL).map(c=>`<button class="chip" data-filter-cat="${c}" style="border-left:3px solid ${CAT_COLOR[c]}">${CAT_LABEL[c]}</button>`).join('');
+
+let state = {search:'', cat:'all', onlyPending:false};
+function renderMatrix(){
+  const body = document.getElementById('matrixbody');
+  const q = state.search.trim().toLowerCase();
+  const rows = PLAN.filter(r=>{
+    if(state.cat!=='all' && r.categoria!==state.cat) return false;
+    if(q && !r.name.toLowerCase().includes(q)) return false;
+    if(state.onlyPending && visited[r._id]) return false;
+    return true;
+  });
+  body.innerHTML = rows.map(r=>{
+    const isVisited = !!visited[r._id];
+    return `<tr class="${isVisited?'visited':''}" data-id="${r._id}">
+      <td class="chk"><input type="checkbox" ${isVisited?'checked':''} data-check="${r._id}"></td>
+      <td class="name">${r.name}</td>
+      <td>${catBadge(r.categoria)}</td>
+      <td class="rubro">${r.rubro}</td>
+      <td>Ejecutivo ${r.exec_id}</td>
+      <td class="mono">${r.day}</td>
+      <td>${confBadge(r.confianza)}</td>
+    </tr>`;
+  }).join('');
+  const total = PLAN.length;
+  const done = PLAN.filter(r=>visited[r._id]).length;
+  document.getElementById('progress').innerHTML = `<b>${done}</b> / ${total} visitadas (${Math.round(done/total*100)}%)`;
+}
+document.getElementById('matrixbody').addEventListener('change', e=>{
+  const cb = e.target.closest('input[data-check]');
+  if(!cb) return;
+  const id = cb.dataset.check;
+  if(cb.checked) visited[id]=true; else delete visited[id];
+  saveVisited();
+  renderMatrix();
+});
+document.getElementById('search').addEventListener('input', e=>{ state.search=e.target.value; renderMatrix(); });
+document.querySelectorAll('[data-filter-cat]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    state.cat = btn.dataset.filterCat;
+    document.querySelectorAll('[data-filter-cat]').forEach(b=>b.classList.toggle('active', b===btn));
+    renderMatrix();
+  });
+});
+document.querySelector('[data-filter-vis="pending"]').addEventListener('click', function(){
+  state.onlyPending = !state.onlyPending;
+  this.classList.toggle('active', state.onlyPending);
+  renderMatrix();
+});
+renderMatrix();
+
+document.getElementById('excludedlist').innerHTML = EXCLUDED.map(e=>`<li>${e.name} <span class="faint">&mdash; ${e.rubro_real}</span></li>`).join('');
+</script>
+</body>
+</html>

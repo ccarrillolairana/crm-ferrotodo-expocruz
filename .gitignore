@@ -1,0 +1,8 @@
+# Temporary & OS files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# Backup scripts if any
+scratch/
