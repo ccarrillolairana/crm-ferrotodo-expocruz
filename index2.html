@@ -13,6 +13,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,600;0,700;0,800;0,900;1,700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- SheetJS para exportación nativa a Excel (.xlsx) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <style>
 :root {
   --bg: #F4F6F8;
@@ -900,27 +903,154 @@ table.data-table tr.visited td.no-strike {
   cursor: pointer;
 }
 
-/* Print Styles */
+/* Vendor Action Buttons */
+.v-act-btn {
+  background: #F3F4F6;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+.v-act-btn:hover {
+  background: #111827;
+  color: #FFC700;
+  border-color: #111827;
+}
+
+/* Print PDF Styling */
+#print-area {
+  display: none;
+}
+
 @media print {
-  nav.navbar, .toolbar, .days-bar, .modal-backdrop, .btn-info-small, .search-box {
+  body.printing-pdf > *:not(#print-area) {
     display: none !important;
   }
-  body {
-    background: #FFF !important;
-    color: #000 !important;
+  body.printing-pdf #print-area {
+    display: block !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    font-family: 'Work Sans', sans-serif;
+    padding: 0;
+    margin: 0;
   }
-  .container {
-    max-width: 100% !important;
-    padding: 0 !important;
+  @page {
+    size: letter portrait;
+    margin: 10mm 12mm 12mm 12mm;
   }
-  .vendor-day-col {
-    break-inside: avoid;
-    border: 1px solid #000 !important;
-  }
-  .item-card {
-    border: 1px solid #ccc !important;
-    background: #FFF !important;
-  }
+}
+
+.pdf-page {
+  page-break-after: always;
+  break-after: page;
+  padding: 10px 0;
+}
+.pdf-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+.pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #FFC700;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.pdf-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pdf-logo {
+  height: 40px;
+  width: auto;
+}
+.pdf-title-main {
+  font-family: 'Barlow', sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: #111827;
+  text-transform: uppercase;
+}
+.pdf-sub {
+  font-size: 11px;
+  color: #4B5563;
+  font-weight: 600;
+}
+.pdf-vendor-box {
+  background: #F9FAFB;
+  border: 1.5px solid #D1D5DB;
+  border-left: 6px solid var(--v-pdf-color, #111827);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pdf-v-name {
+  font-family: 'Barlow', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: #111827;
+  text-transform: uppercase;
+}
+.pdf-v-meta {
+  font-size: 11.5px;
+  color: #374151;
+  font-weight: 600;
+}
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+  margin-bottom: 20px;
+}
+.pdf-table th {
+  background: #111827 !important;
+  color: #FFC700 !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 6px 8px;
+  text-align: left;
+  text-transform: uppercase;
+}
+.pdf-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #E5E7EB;
+  vertical-align: middle;
+}
+.pdf-table tr:nth-child(even) td {
+  background: #F9FAFB !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.pdf-signatures {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 35px;
+  padding-top: 15px;
+}
+.pdf-sig-line {
+  border-top: 1px solid #9CA3AF;
+  width: 200px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+  padding-top: 5px;
 }
 </style>
 </head>
@@ -951,8 +1081,11 @@ table.data-table tr.visited td.no-strike {
       <button class="nav-link" data-view="analytics" onclick="switchView('analytics')">
         <i class="fa-solid fa-chart-simple"></i> Análisis de Cobertura
       </button>
-      <button class="nav-link" style="background:#FFC700; color:#111827;" onclick="window.print()">
-        <i class="fa-solid fa-print"></i> Imprimir Reporte
+      <button class="nav-link" style="background:#047857; color:#FFFFFF;" onclick="exportToExcel(selectedVendor)" title="Exportar a Excel (.xlsx)">
+        <i class="fa-solid fa-file-excel"></i> Excel
+      </button>
+      <button class="nav-link" style="background:#FFC700; color:#111827;" onclick="openExportModal()" title="Exportar o Imprimir PDF por Vendedor">
+        <i class="fa-solid fa-file-pdf"></i> Imprimir PDF / Exportar
       </button>
     </div>
   </div>
@@ -1479,8 +1612,16 @@ function renderVendorView() {
             <div style="font-size:13px; color:var(--text-muted); font-weight:600;">Días de atención asignados: <b style="color:#D97706;">${v.days}</b></div>
           </div>
         </div>
-        <div class="mono" style="font-size:18px; font-weight:800; background:#F3F4F6; padding:6px 14px; border-radius:6px;">
-          Total: ${vItems.length} empresas
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <div class="mono" style="font-size:15px; font-weight:800; background:#F3F4F6; padding:6px 12px; border-radius:6px;">
+            Total: ${vItems.length} empresas
+          </div>
+          <button class="v-act-btn" style="background:#ECFDF5; color:#047857; border-color:#A7F3D0;" onclick="exportToExcel('${vName}')">
+            <i class="fa-solid fa-file-excel"></i> Excel
+          </button>
+          <button class="v-act-btn" style="background:#FFFBEB; color:#D97706; border-color:#FDE68A;" onclick="printVendorPDF('${vName}')">
+            <i class="fa-solid fa-file-pdf"></i> Imprimir PDF
+          </button>
         </div>
       </div>
       ${daysHtml || '<div style="color:var(--text-muted); padding:10px 0; font-weight:500;">No hay empresas asignadas en el filtro actual</div>'}
@@ -1610,8 +1751,211 @@ function onFilterChange() {
   renderCurrentView();
 }
 
+/* Funcionalidades de Exportación e Impresión PDF */
+function openExportModal() {
+  document.getElementById('export-modal-backdrop').classList.add('open');
+}
+
+function closeExportModal() {
+  document.getElementById('export-modal-backdrop').classList.remove('open');
+}
+
+function exportSelectedExcel() {
+  const vendor = document.getElementById('export-vendor-select').value;
+  exportToExcel(vendor);
+}
+
+function exportSelectedCSV() {
+  const vendor = document.getElementById('export-vendor-select').value;
+  exportToCSV(vendor);
+}
+
+function printSelectedPDF() {
+  const vendor = document.getElementById('export-vendor-select').value;
+  closeExportModal();
+  printVendorPDF(vendor);
+}
+
+function printVendorPDF(vendorName) {
+  const printArea = document.getElementById('print-area');
+  printArea.innerHTML = '';
+  
+  const vendorsToPrint = vendorName === 'all' ? Object.keys(VENDORS) : [vendorName];
+  const currentDate = new Date().toLocaleDateString('es-BO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  
+  vendorsToPrint.forEach(vName => {
+    const v = VENDORS[vName] || { sector: 'Sector General', color: '#111827', days: 'Todos' };
+    const items = RAW_DATA.filter(it => it.vendedor === vName).sort((a,b) => a.day - b.day || a.order - b.order);
+    
+    if (items.length === 0 && vendorName !== 'all') return;
+    
+    const visitedCount = items.filter(it => !!visitedMap[it.id]).length;
+    const pendingCount = items.length - visitedCount;
+    
+    let rowsHtml = items.map((it, idx) => `
+      <tr>
+        <td style="font-weight:700; text-align:center;">${idx + 1}</td>
+        <td style="font-weight:700; white-space:nowrap;">Día ${it.day}</td>
+        <td style="white-space:nowrap;">${it.date_str}</td>
+        <td style="font-weight:700; color:#111827;">${it.name}</td>
+        <td style="font-size:10px;">${it.rubro}</td>
+        <td style="text-transform:uppercase; font-size:9.5px; font-weight:800;">${it.confianza}</td>
+        <td style="font-weight:700; font-size:9.5px; color:${visitedMap[it.id] ? '#047857' : '#D97706'};">
+          ${visitedMap[it.id] ? '✓ VISITADO' : '○ PENDIENTE'}
+        </td>
+      </tr>
+    `).join('');
+    
+    const page = document.createElement('div');
+    page.className = 'pdf-page';
+    page.style.setProperty('--v-pdf-color', v.color);
+    
+    page.innerHTML = `
+      <div class="pdf-header">
+        <div class="pdf-brand">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt7MWHfMR7vd-sPVdBjFS3VfM1huF4WHiU4MFV9lmDZ_TB5Vm4mDEEbK8l&s=10" class="pdf-logo" alt="Ferrotodo Logo">
+          <div>
+            <div class="pdf-title-main">FERROTODO S.A. &bull; EXPOCRUZ 2026</div>
+            <div class="pdf-sub">Informe Comercial de Visitas por Ejecutivo &bull; Fecha: ${currentDate}</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Barlow',sans-serif; font-size:14px; font-weight:900; color:#D97706;">PLAN DE VISITAS</div>
+          <div style="font-size:10px; color:#6B7280; font-weight:600;">Total: ${items.length} Clientes</div>
+        </div>
+      </div>
+      
+      <div class="pdf-vendor-box">
+        <div>
+          <div class="pdf-v-name" style="color:${v.color};">${vName}</div>
+          <div class="pdf-v-meta">Sector: <b>${v.sector}</b> | Días de atención: <b>${v.days}</b></div>
+        </div>
+        <div style="text-align:right; font-size:11px; font-weight:700;">
+          <span style="color:#047857; margin-right:10px;">✓ Visitados: ${visitedCount}</span>
+          <span style="color:#B45309;">○ Pendientes: ${pendingCount}</span>
+        </div>
+      </div>
+      
+      <table class="pdf-table">
+        <thead>
+          <tr>
+            <th style="width:25px; text-align:center;">#</th>
+            <th style="width:45px;">Día</th>
+            <th style="width:95px;">Fecha</th>
+            <th>Empresa Prospecto</th>
+            <th>Rubro / Sector</th>
+            <th style="width:65px;">Confianza</th>
+            <th style="width:75px;">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml || '<tr><td colspan="7" style="text-align:center;">Sin empresas registradas</td></tr>'}
+        </tbody>
+      </table>
+    `;
+    
+    printArea.appendChild(page);
+  });
+  
+  document.body.classList.add('printing-pdf');
+  window.print();
+  
+  setTimeout(() => {
+    document.body.classList.remove('printing-pdf');
+  }, 1000);
+}
+
+function exportToExcel(vendorName) {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  
+  if (typeof XLSX === 'undefined') {
+    console.warn('SheetJS not loaded, falling back to CSV');
+    exportToCSV(vendorName);
+    return;
+  }
+  
+  const wb = XLSX.utils.book_new();
+  const vendorsToExport = vendorName === 'all' ? Object.keys(VENDORS) : [vendorName];
+  
+  vendorsToExport.forEach(vName => {
+    const items = RAW_DATA.filter(it => it.vendedor === vName).sort((a,b) => a.day - b.day || a.order - b.order);
+    
+    const tableData = items.map((it, idx) => ({
+      'N°': idx + 1,
+      'Día': `Día ${it.day}`,
+      'Fecha Visita': it.date_str,
+      'Hora Aprox': it.time || '18:00',
+      'Empresa Prospecto': it.name,
+      'Rubro / Sector': it.rubro,
+      'Sector Ferrotodo': it.sector,
+      'Nivel Confianza': it.confianza.toUpperCase(),
+      'Estado Visita': visitedMap[it.id] ? 'VISITADO' : 'PENDIENTE',
+      'Notas Clasificación': it.nota || '',
+      'Fila Excel Original': it.excel_row
+    }));
+    
+    const ws = XLSX.utils.json_to_sheet(tableData);
+    ws['!cols'] = [
+      { wch: 4 }, { wch: 8 }, { wch: 16 }, { wch: 10 },
+      { wch: 40 }, { wch: 35 }, { wch: 25 }, { wch: 12 },
+      { wch: 12 }, { wch: 45 }, { wch: 12 }
+    ];
+    
+    let sheetName = vName.replace(/[\\/*?:[\]]/g, '').slice(0, 31);
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+  
+  const fileName = vendorName === 'all' 
+    ? `Ferrotodo_Expocruz2026_Todos_los_Vendedores_${dateStr}.xlsx`
+    : `Ferrotodo_Expocruz2026_${vendorName.replace(/\s+/g, '_')}_${dateStr}.xlsx`;
+    
+  XLSX.writeFile(wb, fileName);
+}
+
+function exportToCSV(vendorName) {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const items = (vendorName === 'all' ? RAW_DATA : RAW_DATA.filter(it => it.vendedor === vendorName))
+    .sort((a,b) => a.vendedor.localeCompare(b.vendedor) || a.day - b.day);
+    
+  let csv = '\uFEFF'; // BOM UTF-8 for Excel
+  csv += 'N°,Ejecutivo,Día,Fecha,Hora,Empresa Prospecto,Rubro,Sector,Confianza,Estado,Notas\n';
+  
+  items.forEach((it, idx) => {
+    const cleanStr = str => `"${(str || '').replace(/"/g, '""')}"`;
+    const row = [
+      idx + 1,
+      cleanStr(it.vendedor),
+      cleanStr(`Día ${it.day}`),
+      cleanStr(it.date_str),
+      cleanStr(it.time || '18:00'),
+      cleanStr(it.name),
+      cleanStr(it.rubro),
+      cleanStr(it.sector),
+      cleanStr(it.confianza.toUpperCase()),
+      cleanStr(visitedMap[it.id] ? 'VISITADO' : 'PENDIENTE'),
+      cleanStr(it.nota)
+    ];
+    csv += row.join(',') + '\n';
+  });
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = vendorName === 'all' 
+    ? `Ferrotodo_Expocruz2026_Clientes_Todos_${dateStr}.csv`
+    : `Ferrotodo_Expocruz2026_${vendorName.replace(/\s+/g, '_')}_${dateStr}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Escape') {
+    closeModal();
+    closeExportModal();
+  }
 });
 
 // Initialize
@@ -1620,6 +1964,64 @@ initDaysBar();
 renderCurrentView();
 updateStats();
 </script>
+
+<!-- Modal de Exportación e Impresión PDF -->
+<div class="modal-backdrop" id="export-modal-backdrop" onclick="closeExportModal()">
+  <div class="modal-container" onclick="event.stopPropagation()" style="max-width:560px;">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title"><i class="fa-solid fa-file-export"></i> Exportar e Imprimir PDF</div>
+        <div class="modal-subtitle">Listado de Clientes por Ejecutivo Comercial &bull; Expocruz 2026</div>
+      </div>
+      <button class="modal-close-btn" onclick="closeExportModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-section">
+        <label class="modal-section-title" for="export-vendor-select">Seleccionar Ejecutivo Comercial</label>
+        <select id="export-vendor-select" class="filter-btn" style="width:100%; padding:10px 14px; font-size:14px; background:#FFF; border:2px solid var(--border); border-radius:8px; font-weight:700; color:#111827;">
+          <option value="all">🌟 Todos los Ejecutivos (9 Vendedores - 308 Empresas)</option>
+          <option value="Denis Mayser">Denis Mayser (Agropecuario)</option>
+          <option value="Juan Diego">Juan Diego (Industrial)</option>
+          <option value="Roger Sanchez">Roger Sanchez (Productor Mecánico)</option>
+          <option value="Luis Aldunate">Luis Aldunate (Mayorista)</option>
+          <option value="Ronald Balcazar">Ronald Balcazar (Industrial)</option>
+          <option value="Hugo Gonzales">Hugo Gonzales (Constructoras)</option>
+          <option value="Diego Justiniano">Diego Justiniano (Construcción Civil)</option>
+          <option value="Viviana Maldonado">Viviana Maldonado (Mayorista)</option>
+          <option value="Eduardo Frey">Eduardo Frey (Mayorista)</option>
+        </select>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:20px;">
+        <button onclick="exportSelectedExcel()" style="background:#047857; color:#FFF; border:none; padding:16px; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; box-shadow:var(--shadow-sm); transition:all 0.2s;">
+          <i class="fa-solid fa-file-excel" style="font-size:26px;"></i>
+          <span>Descargar Excel (.xlsx)</span>
+          <span style="font-size:11px; opacity:0.85; font-weight:500;">(Hoja por cada Vendedor)</span>
+        </button>
+
+        <button onclick="printSelectedPDF()" style="background:#D97706; color:#FFF; border:none; padding:16px; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; box-shadow:var(--shadow-sm); transition:all 0.2s;">
+          <i class="fa-solid fa-file-pdf" style="font-size:26px;"></i>
+          <span>Imprimir / PDF</span>
+          <span style="font-size:11px; opacity:0.85; font-weight:500;">(Vista Oficial Carta con Saltos)</span>
+        </button>
+      </div>
+      
+      <div style="margin-top:14px; text-align:center;">
+        <button onclick="exportSelectedCSV()" style="background:transparent; color:#4B5563; border:1px solid #D1D5DB; padding:8px 16px; border-radius:6px; font-weight:700; font-size:12px; cursor:pointer;">
+          <i class="fa-solid fa-file-csv"></i> Descargar formato CSV (UTF-8)
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="act-btn" onclick="closeExportModal()" style="background:#111827; color:#FFC700; margin-left:auto;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Print Container (Visible only during window.print) -->
+<div id="print-area"></div>
 
 </body>
 </html>
